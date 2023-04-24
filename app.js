@@ -17,6 +17,8 @@ app.get("/", (req, res) => {
   });
 });
 
+app.use('/events', require('./src/modules/events/events.routes'));
+app.use('/sessions', require('./src/modules/sessions/sessions.routes'));
 // app.use("/auth", require("./modules/auth/auth.routes"));
 
 module.exports = app;

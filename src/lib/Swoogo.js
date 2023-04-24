@@ -1,10 +1,10 @@
 const axios = require("axios");
 const API_ROOT = "https://api.swoogo.com/api/v1";
 
-class Swoogo {
-  apiKey = "";
-  apiSecret = "";
+const apiKey = process.env.SWOOGO_API_KEY;
+const apiSecret = process.env.SWOOGO_API_SECRET;
 
+class Swoogo {
   access_token = "";
 
   constructor(apiKey, apiSecret) {
@@ -20,8 +20,8 @@ class Swoogo {
       }),
       {
         auth: {
-          username: this.apiKey,
-          password: this.apiSecret,
+          username: apiKey,
+          password: apiSecret,
         },
       }
     );
@@ -41,7 +41,6 @@ class Swoogo {
   async request({ method = "GET", path, data, params }) {
     const token = await this.getToken();
 
-   
     const response = await axios({
       url: `${API_ROOT}${path}`,
       method,
@@ -51,7 +50,7 @@ class Swoogo {
         Authorization: `Bearer ${token.access_token}`,
       },
     });
-    
+
     return response.data;
   }
 
@@ -69,7 +68,7 @@ class Swoogo {
     return {
       items: sessions.items,
       _meta: sessions._meta,
-    }
+    };
   }
 
   async getEventSessionById(id) {
@@ -81,10 +80,7 @@ class Swoogo {
   // async getEventSessions
 }
 
-const client = new Swoogo(
-  process.env.SWOOGO_API_KEY,
-  process.env.SWOOGO_API_SECRET
-);
+const client = new Swoogo();
 
 // client.getEventSessions(102171).then(res => console.log({res}, {depth: null})).catch(console.log)
 // client.getEventSessionById(1321121).then(console.log).catch(console.log)
